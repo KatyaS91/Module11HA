@@ -33,9 +33,9 @@ public class GitRestAssuredTests {
 		RequestSpecification request = given();
 		Gist requestParams = new Gist();
 		GitFile file = new GitFile();
-		file.setContent("sdsdfsdfsdfsdf");
+		file.setContent("File content");
 		requestParams.setFile(file);
-		requestParams.setDescription("Test");
+		requestParams.setDescription("Gist test");
 		requestParams.setPublic(false);
 		request.header("Content-Type", "application/json");
 		request.body(requestParams.toString());
