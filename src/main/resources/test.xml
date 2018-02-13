@@ -1,13 +1,16 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
-<suite name="Tests" verbose="1">
+<suite name="Tests" verbose="1" parallel="methods" thread-count="3">
     <test name="Tests">
         <groups>
             <run>
                 <exclude name="p1"></exclude>
             </run>
         </groups>
-        <packages>
+<!--        <packages>
             <package name="tests.RestAssuredTests"></package>
-        </packages>
+        </packages>-->
+        <classes>
+            <class name="tests.RestAssuredTests"/>
+        </classes>
     </test>
 </suite>
