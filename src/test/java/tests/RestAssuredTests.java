@@ -23,14 +23,14 @@ public class RestAssuredTests extends BaseTest {
 	public void verifyResponseHeader() {
 		Response response = given().get("/users").andReturn();
 		String header = response.getHeader("content-type");
-		Assert.assertTrue(header.contains("application/json"));
-		Assert.assertTrue(header.contains("charset=utf-8"));
+		Assert.assertTrue(header.contains("application/json"), "Application/json header isn't presented");
+		Assert.assertTrue(header.contains("charset=utf-8"), "Charset isn't presented");
 	}
 
 	@Test(groups = "P0")
 	public void verifyResponseBody() {
 		Response response = given().get("/users").andReturn();
 		User[] users = response.as(User[].class);
-		Assert.assertEquals(users.length, 10);
+		Assert.assertEquals(users.length, 10, "The status code isn't success");
 	}
 }
