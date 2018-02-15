@@ -13,7 +13,7 @@ import static com.jayway.restassured.RestAssured.given;
  */
 public class GitRestAssuredTests {
 
-	private String token = "cd29a762d6d9167bbdef4af71045e5c950934433";
+	private String token = "5115d9aa5d08caaedcb5c4254fcb160eceb67f6d";
 	private String gistId = "cf68b988e5a047021e96309ddd335b1d";
 
 	@BeforeTest(alwaysRun = true)
@@ -28,6 +28,12 @@ public class GitRestAssuredTests {
 		Assert.assertEquals(actualStatusCode, 200, "The status code isn't success");
 	}
 
+	@Test(groups = "P0")
+	public void starGist_PUT() {
+		Response response = given().when().put(gistId + "/star" +"?access_token=" + token);
+		Assert.assertEquals(response.statusCode(), 204, "The status code there is a content");
+	}
+
 	@Test(groups = "P0", priority = 1)
 	public void deleteGist_DELETE() {
 		Response response = given().when().delete(gistId +"?access_token=" + token);
@@ -36,8 +42,7 @@ public class GitRestAssuredTests {
 
 	@Test(groups = "P0")
 	public void createGist_POST() {
-		Response response = given().params("fileweqwe.txt", "myfile.txt", "description", "sdsdsd", "public", "true").contentType("application/json").headers("Authorization: ", "token " +token).when().post();
+		Response response = given().contentType("application/json").headers("Authorization: ", "token " +token).when().post("{\"description\": \"the description for this gist\",\"public\": true}");
 		Assert.assertEquals(response.statusCode(), 201, "The status code isn't created");
 	}
 }
-//PUT-POST
