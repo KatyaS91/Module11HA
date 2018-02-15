@@ -1,10 +1,7 @@
 package tests;
 
-import beangist.Gist;
-import beangist.GitFile;
 import com.jayway.restassured.RestAssured;
 import com.jayway.restassured.response.Response;
-import com.jayway.restassured.specification.RequestSpecification;
 import org.testng.Assert;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
@@ -16,30 +13,31 @@ import static com.jayway.restassured.RestAssured.given;
  */
 public class GitRestAssuredTests {
 
+	private String token = "cd29a762d6d9167bbdef4af71045e5c950934433";
+	private String gistId = "cf68b988e5a047021e96309ddd335b1d";
+
 	@BeforeTest(alwaysRun = true)
 	public void setUp() {
-		RestAssured.baseURI = "https://github.com";
+		RestAssured.baseURI = "https://api.github.com/gists/";
 	}
 
 	@Test(groups = "P0")
-	public void verifyStatusCode() {
-		Response response = given().get("/KatyaS91?tab=repositories").andReturn();
+	public void verifyStatusCode_GET() {
+		Response response = given().when().get(gistId +"?access_token=" + token);
 		int actualStatusCode = response.statusCode();
 		Assert.assertEquals(actualStatusCode, 200, "The status code isn't success");
 	}
 
+	@Test(groups = "P0", priority = 1)
+	public void deleteGist_DELETE() {
+		Response response = given().when().delete(gistId +"?access_token=" + token);
+		Assert.assertEquals(response.statusCode(), 204, "The status code isn't not content");
+	}
+
 	@Test(groups = "P0")
-	public void verifyGistsCount() {
-		RequestSpecification request = given();
-		Gist requestParams = new Gist();
-		GitFile file = new GitFile();
-		file.setContent("File content");
-		requestParams.setFile(file);
-		requestParams.setDescription("Gist test");
-		requestParams.setPublic(false);
-		request.header("Content-Type", "application/json");
-		request.body(requestParams.toString());
-		Response response = request.post("/gists");
-		Assert.assertEquals(response.getStatusCode(), 200, "The status code isn't success");
+	public void createGist_POST() {
+		Response response = given().params("fileweqwe.txt", "myfile.txt", "description", "sdsdsd", "public", "true").contentType("application/json").headers("Authorization: ", "token " +token).when().post();
+		Assert.assertEquals(response.statusCode(), 201, "The status code isn't created");
 	}
 }
+//PUT-POST
