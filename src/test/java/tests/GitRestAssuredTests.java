@@ -1,5 +1,8 @@
 package tests;
 
+import beangist.Gist;
+import beangist.GistContent;
+import beangist.GistFile;
 import com.jayway.restassured.RestAssured;
 import com.jayway.restassured.response.Response;
 import org.testng.Assert;
@@ -13,12 +16,21 @@ import static com.jayway.restassured.RestAssured.given;
  */
 public class GitRestAssuredTests {
 
-	private String token = "5115d9aa5d08caaedcb5c4254fcb160eceb67f6d";
+	private String token = "bbacb8c6943c551a7a4a51ad9bca76461f36ebbe";
 	private String gistId = "cf68b988e5a047021e96309ddd335b1d";
+	private Gist gist = new Gist();
 
 	@BeforeTest(alwaysRun = true)
 	public void setUp() {
 		RestAssured.baseURI = "https://api.github.com/gists/";
+		
+		GistContent content = new GistContent();
+		content.setContent("file content");
+		GistFile file = new GistFile();
+		file.setFile(content);
+		gist.setDescription("some description");
+		gist.setPublic(true);
+		gist.setFiles(file);
 	}
 
 	@Test(groups = "P0")
@@ -42,7 +54,7 @@ public class GitRestAssuredTests {
 
 	@Test(groups = "P0")
 	public void createGist_POST() {
-		Response response = given().contentType("application/json").headers("Authorization: ", "token " +token).when().post("{\"description\": \"the description for this gist\",\"public\": true}");
+		Response response = given().contentType("application/json").headers("Authorization: ", "token " +token).when().post("body", gist);
 		Assert.assertEquals(response.statusCode(), 201, "The status code isn't created");
 	}
 }
